@@ -1,0 +1,21 @@
+.app-main{
+    min-height: 100vh;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    background: lightyellow;
+    .content {
+        flex: 1; /* Grow to fill remaining space */
+        .content-data{
+           padding-bottom: 0.5rem;
+        }
+        button{
+            display: block;
+            margin-bottom: 5px;
+        }
+      }
+      
+    .footer{
+        margin-top: auto;
+    }
+}
