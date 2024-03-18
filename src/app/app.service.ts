@@ -12,7 +12,7 @@ import * as fs from "fs";
     private client: any;
     constructor(private http: HttpClient) {
       const endpoint = "https://factexpdaiopi02.openai.azure.com/";
-      const credential = new AzureKeyCredential("02e224bfcf784d4b8b92e5104a5ed72f");
+      const credential = new AzureKeyCredential("");
       const options = { apiVersion: '2023-05-15' }; 
       this.client = new OpenAIClient(endpoint, credential, options);
      }
@@ -44,7 +44,7 @@ import * as fs from "fs";
 
     /* this method will get me the data from Azure open api without any package*/
     LoadOpenAidata(data: string): Observable<any> {
-      let accessToken = '02e224bfcf784d4b8b92e5104a5ed72f';
+      let accessToken = '';
       const httpOptions = {
           headers: new HttpHeaders({
             "api-key": `${accessToken}`,
