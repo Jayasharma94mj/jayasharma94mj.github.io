@@ -66,30 +66,6 @@ import * as fs from "fs";
         }, httpOptions)
       .pipe(map(data => { return data } ))
     }
-
-    // LoadOpenAidata(): Observable<any> {
-    //     let accessToken = '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';
-    //     const httpOptions = {
-    //         headers: new HttpHeaders({
-    //           "Authorization": `Bearer ${accessToken}`,
-    //           "Content-Type": 'application/json',
-    //         })
-    //       };
-    //     return this.http.post('https://api.openai.com/v1/chat/completions', {
-    //         "model": "gpt-3.5-turbo",
-    //         "messages": [
-    //           {
-    //             "role": "system",
-    //             "content": "You are a helpful assistant."
-    //           },
-    //           {
-    //             "role": "user",
-    //             "content": "Hello!"
-    //           }
-    //         ]
-    //       }, httpOptions)
-    //     .pipe(map(data => { return data } ))
-    //   }
       
       /*This method will get me the missing methods from the node script*/
       runTests() {
