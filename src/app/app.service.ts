@@ -8,7 +8,7 @@ import * as fs from "fs";
 
 @Injectable()
   export class AppService {
-    private baseUrl = 'http://localhost:3000';
+    private baseUrl = 'https://jayaopenapi.onrender.com';
     private client: any;
     constructor(private http: HttpClient) {
       const endpoint = "https://factexpdaiopi02.openai.azure.com/";
