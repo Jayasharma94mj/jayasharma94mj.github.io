@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// This file will provide me the method name and content for which the unit tests are missing
 var fs = require("fs");
 var path = require("path");
+var totalMethods = 0;
+var missingUnitTestCount = 0;
+var missingUnitTests = [];
 function analyzeAndCheckTests(directory) {
     var files = fs.readdirSync(directory);
     files.forEach(function (file) {
@@ -20,14 +22,16 @@ function analyzeAndCheckTestForFile(filePath) {
         var testFilePath = filePath.replace('.ts', '.spec.ts');
         if (!fs.existsSync(testFilePath)) {
             console.log("Missing unit test for: ".concat(filePath));
+            missingUnitTestCount++;
         }
         else {
             var fileContent = fs.readFileSync(filePath, 'utf-8');
             var testFileContent = fs.readFileSync(testFilePath, 'utf-8');
             var testedMethods = extractTestedMethods(testFileContent);
-            var methods = extractMethods(fileContent, testedMethods);
+            var methods = extractMethods(fileContent);
+            totalMethods += methods.length;
             if (methods.length > 0) {
-                checkTestMethods(testFilePath, methods);
+                checkTestMethods(testFilePath, methods, testedMethods);
             }
         }
     }
@@ -38,7 +42,7 @@ function extractTestedMethods(testFileContent) {
     var matches = testFileContent.matchAll(testMethodRegex);
     return Array.from(matches, function (match) { return match[1]; });
 }
-function extractMethods(fileContent, testedMethods) {
+function extractMethods(fileContent) {
     var methodRegex = /(?:public|private|protected)?\s+(\w+)\s*=\s*\([^)]*\)\s*:\s*\w+\s*=>\s*{/g;
     var matches = [];
     var match;
@@ -47,9 +51,7 @@ function extractMethods(fileContent, testedMethods) {
         var methodStartIndex = match.index;
         var methodEndIndex = findMethodEndIndex(fileContent, methodStartIndex);
         var methodContent = fileContent.substring(methodStartIndex, methodEndIndex);
-        if (!testedMethods.includes(methodName)) {
-            matches.push({ name: methodName, content: methodContent });
-        }
+        matches.push({ name: methodName, content: methodContent });
     }
     return matches;
 }
@@ -70,15 +72,23 @@ function findMethodEndIndex(fileContent, methodStartIndex) {
     }
     return -1; // Method end not found
 }
-function checkTestMethods(testFilePath, methods) {
+function checkTestMethods(testFilePath, methods, testedMethods) {
     var testFileContent = fs.readFileSync(testFilePath, 'utf-8');
     methods.forEach(function (method) {
-        if (!testFileContent.includes(method.content)) {
+        if (!testedMethods.includes(method.name)) {
             //console.log(`Missing unit test for method '${method.name}' in: ${testFilePath}`);
-            console.log("Provide me unit test for below content: ".concat(method.content));
+            //console.log(`Provide me unit test for below content: ${method.content}`);
+            missingUnitTestCount++;
+            missingUnitTests.push("Provide me unit test for below content: ".concat(method.content));
         }
     });
 }
 // Run analysis on the entire Angular project
 var projectRoot = path.resolve(__dirname, 'src/app'); // Change to your actual project structure
 analyzeAndCheckTests(projectRoot);
+var combinedMissingUnitTests = missingUnitTests.join('\n');
+console.log(JSON.stringify({
+    combinedMissingUnitTests: combinedMissingUnitTests,
+    totalMethods: totalMethods,
+    missingUnitTestCount: missingUnitTestCount
+}));

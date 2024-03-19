@@ -15,63 +15,59 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'welcome to chat bot';
+  title = 'Lets Help you to Find out missing uts';
   showTheUt = ''
   initialValue: boolean = false;
   userForm: FormGroup;
   userInput : string[] = [];
   dataFromServer = []
   isLoading: boolean = false
+  showutdata: boolean = false
+  missingUnitTest = 0
+  totalUnittest = 0
   constructor(private fb: FormBuilder, private load: AppService) {
     this.userForm = this.fb.group({
       userinput: [, Validators.required]
     });
   }
-
-   submitForm() {
-    console.log('Form Submitted with value: ', this.userForm.value);
-      this.userInput.push(this.userForm.get('userinput')?.value)
-
-      this.load.runTests().subscribe(async(response) =>{
-        console.log('response is', response.output);
-
-        //call the method without package
-        this.load.LoadOpenAidata(response.output).subscribe((data)=>{
-          console.log("data is", data)
-        })
-
-        //Call the method with package
-        const responsedata = await this.load.getResponse(response.output)
-        console.log("data from package", responsedata);
-      })
-    }
-
     clickWithoutPackage = (): void => {  
+      this.isLoading = true
       this.showTheUt = ""
-      this.load.runTests().subscribe((response) =>{
-        this.isLoading = true
-        console.log('response is', response.output);
+      this.showutdata = false
+      this.load.runTests().subscribe((response) =>{       
+        console.log('response is', response.content);
 
         //call the method without package
-        this.load.LoadOpenAidata(response.output).subscribe((data)=>{
+        this.load.LoadOpenAidata(response.content).subscribe((data)=>{
           this.isLoading = false
           console.log("data is", data.choices[0].message.content)
-          this.showTheUt = data.choices[0].message.content         
+          this.showutdata = true
+          this.missingUnitTest = response.missingUnitTestCount
+          this.totalUnittest = response.totalMethods
+          this.showTheUt = data.choices[0].message.content  
+          this.downloadFile(this.showTheUt, "Generated-Uts")       
         })
       })
     }
-    clickWithPackage = (): void => { 
+
+    clickWithPackage = (): void => {
+      this.isLoading = true 
       this.showTheUt = ""
+      this.showutdata = false
       this.load.runTests().subscribe(async(response) =>{
-        this.isLoading = true
-        console.log('response is', response.output);
+        console.log('response is', response.content);
         //Call the method with package
-        const responsedata = await this.load.getResponse(response.output)
+        const responsedata = await this.load.getResponse(response.content)
         console.log("data from package", responsedata.choices[0].message.content);
         this.isLoading = false
+        this.showutdata = true
+        this.missingUnitTest = response.missingUnitTestCount
+        this.totalUnittest = response.totalMethods
         this.showTheUt =responsedata.choices[0].message.content
+        
       })
     }
+    
   gettitle = (): string => {
     return this.title
   }
@@ -86,6 +82,15 @@ export class AppComponent {
 
   getboolean = (): boolean => {
     return this.initialValue
+  }
+
+  downloadFile(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const anchor = document.createElement('a');
+    anchor.download = filename;
+    anchor.href = window.URL.createObjectURL(blob);
+    anchor.target = '_blank';
+    anchor.click();
   }
   }
 

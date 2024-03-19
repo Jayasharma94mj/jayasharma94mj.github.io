@@ -22,8 +22,16 @@ app.post('/run-tests', (req, res) => {
       res.status(500).send('Internal Server Error');
       return;
     }
-    console.log(`Output: ${stdout}`);
-    res.json({ output: stdout });
+    // console.log(`Output: ${stdout}`);
+    // res.json({ output: stdout });
+    const output = JSON.parse(stdout);
+    
+    // Send the data with separate keys
+    res.json({
+      content: output.combinedMissingUnitTests,
+      totalMethods: output.totalMethods,
+      missingUnitTestCount: output.missingUnitTestCount
+    });
   });
 });
 

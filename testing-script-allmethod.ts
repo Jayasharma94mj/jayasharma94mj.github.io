@@ -1,6 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+let totalMethods = 0;
+let missingUnitTestCount = 0;
+let missingUnitTests: string[] = [];
+
 function analyzeAndCheckTests(directory: string) {
   const files = fs.readdirSync(directory);
 
@@ -82,7 +86,8 @@ function checkTestMethods(testFilePath: string, methods: { name: string; content
   methods.forEach((method) => {
     if (!testFileContent.includes(method.content)) {
       //console.log(`Method Name: ${method.name}`);
-      console.log(`Provide me unit test for: ${method.content}`);
+      //console.log(`Provide me unit test for: ${method.content}`);
+      missingUnitTests.push(`Provide me unit test for below content: ${method.content}`);
     }
   });
 }
@@ -90,3 +95,11 @@ function checkTestMethods(testFilePath: string, methods: { name: string; content
 // Run analysis on the entire Angular project
 const projectRoot = path.resolve(__dirname, 'src/app'); // Change to your actual project structure
 analyzeAndCheckTests(projectRoot);
+
+const combinedMissingUnitTests = missingUnitTests.join('\n');
+
+console.log(JSON.stringify({
+  combinedMissingUnitTests,
+  totalMethods,
+  missingUnitTestCount
+}));

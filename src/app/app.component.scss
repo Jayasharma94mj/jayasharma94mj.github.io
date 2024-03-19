@@ -1,17 +1,48 @@
 .app-main{
     min-height: 100vh;
-    padding: 2%;
     display: flex;
     flex-direction: column;
-    background: lightyellow;
+    background: #25103b;
+    .header{
+        height: 5rem;
+        padding: 3%;
+        border-bottom: 1px solid white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .title{
+        color: white;
+    }
+    .button-class{
+        background: unset;
+    border-radius: 23px;
+    border: solid 2px;
+    padding: 8px 20px;
+    font-weight: bold;
+    }
     .content {
+        padding: 3%;
         flex: 1; /* Grow to fill remaining space */
         .content-data{
            padding-bottom: 0.5rem;
         }
-        button{
-            display: block;
-            margin-bottom: 5px;
+        .title-data{
+            color: #b69bee;
+    text-align: center;
+    font-size: 21px;
+    font-weight: 700;
+        }
+        .trigger-button{
+            display: flex;
+            justify-content: center;
+            margin: 3rem 0rem;
+        }
+        .missing-ut{
+            color:red
+        }
+        .data-ut{
+            font-size: 1rem;
         }
       }
       

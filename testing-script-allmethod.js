@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
 var path = require("path");
+var totalMethods = 0;
+var missingUnitTestCount = 0;
+var missingUnitTests = [];
 function analyzeAndCheckTests(directory) {
     var files = fs.readdirSync(directory);
     files.forEach(function (file) {
@@ -72,10 +75,17 @@ function checkTestMethods(testFilePath, methods) {
     methods.forEach(function (method) {
         if (!testFileContent.includes(method.content)) {
             //console.log(`Method Name: ${method.name}`);
-            console.log("Provide me unit test for: ".concat(method.content));
+            //console.log(`Provide me unit test for: ${method.content}`);
+            missingUnitTests.push("Provide me unit test for below content: ".concat(method.content));
         }
     });
 }
 // Run analysis on the entire Angular project
 var projectRoot = path.resolve(__dirname, 'src/app'); // Change to your actual project structure
 analyzeAndCheckTests(projectRoot);
+var combinedMissingUnitTests = missingUnitTests.join('\n');
+console.log(JSON.stringify({
+    combinedMissingUnitTests: combinedMissingUnitTests,
+    totalMethods: totalMethods,
+    missingUnitTestCount: missingUnitTestCount
+}));
