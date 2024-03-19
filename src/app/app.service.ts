@@ -4,15 +4,18 @@ import { Observable, Subject, ReplaySubject, from, of, range, map } from 'rxjs';
 import { OpenAIClient } from "@azure/openai";
 import { AzureKeyCredential } from "@azure/core-auth";
 import * as fs from "fs";
+import { environment } from '../environments/environment.prod';
 
 
 @Injectable()
   export class AppService {
-    private baseUrl = 'https://jayaopenapi.onrender.com';
+    //private baseUrl = 'https://jayaopenapi.onrender.com';
+    private baseUrl = 'http://localhost:3000';
     private client: any;
+    private apiKey = environment.apiKey;
     constructor(private http: HttpClient) {
       const endpoint = "https://factexpdaiopi02.openai.azure.com/";
-      const credential = new AzureKeyCredential("");
+      const credential = new AzureKeyCredential(this.apiKey);
       const options = { apiVersion: '2023-05-15' }; 
       this.client = new OpenAIClient(endpoint, credential, options);
      }
@@ -28,23 +31,11 @@ import * as fs from "fs";
       const events = this.client.getChatCompletions('gpt-35-UT', messages);
 
       return events
-      // const completion = await this.client.chat.completions.create({
-      //   model: "gpt-35-UT",
-      //   messages: [
-      //     {
-      //       role: "user",
-      //       content: userMessage,
-      //     },
-      //   ],
-      // });
-  
-      // const responseMessage = completion.results[0].output;
-      // return responseMessage;
     }
 
     /* this method will get me the data from Azure open api without any package*/
     LoadOpenAidata(data: string): Observable<any> {
-      let accessToken = '';
+      let accessToken = this.apiKey;
       const httpOptions = {
           headers: new HttpHeaders({
             "api-key": `${accessToken}`,
