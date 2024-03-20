@@ -9,8 +9,8 @@ import { environment } from '../environments/environment.prod';
 
 @Injectable()
   export class AppService {
-    //private baseUrl = 'https://jayaopenapi.onrender.com';
-    private baseUrl = 'http://localhost:3000';
+    private baseUrl = 'https://jayaopenapi.onrender.com';
+    //private baseUrl = 'http://localhost:3000';
     private client: any;
     private apiKey = environment.apiKey;
     constructor(private http: HttpClient) {
