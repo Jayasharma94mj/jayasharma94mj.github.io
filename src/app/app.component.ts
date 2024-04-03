@@ -36,7 +36,7 @@ export class AppComponent {
   } ];
   public pieChartLegend = true;
   public pieChartPlugins = [];
-  constructor(private fb: FormBuilder, private load: AppService) {
+  constructor(private fb: FormBuilder, public load: AppService) {
     this.userForm = this.fb.group({
       userinput: [, Validators.required]
     });
