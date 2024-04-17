@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartOptions } from 'chart.js';
+import { environment } from '../environments/environment.prod';
 
 @Component({
   selector: 'app-root',
@@ -24,8 +25,11 @@ export class AppComponent {
   dataFromServer = []
   isLoading: boolean = false
   showutdata: boolean = false
+  showUploadedFile: boolean = false;
+  uploadedFile: string = ''
   missingUnitTest = 0
   totalUnittest = 0
+  anchor: any
   showFooter: boolean = false
   public pieChartOptions = {
     responsive: false,
@@ -78,11 +82,24 @@ export class AppComponent {
 
   generateUts = (): void => {
     this.isLoading = true
+    const startTime = new Date();
     this.load.LoadOpenAidata(this.showTheUt).subscribe((data) => {
       this.isLoading = false
+      const endTime = new Date();
+      const timeElapsed = (endTime.getTime() - startTime.getTime()) / 1000;
+      let timeUnit;
+    let timeValue;
+    if (timeElapsed < 60) {
+      timeUnit = 'Sec';
+      timeValue = Math.round(timeElapsed);
+    } else {
+      timeUnit = 'min';
+      timeValue = Math.round(timeElapsed / 60);
+    }
+ 
       console.log("data is", data.choices[0].message.content)
       //this.showTheUt = data.choices[0].message.content
-      this.downloadFile(data.choices[0].message.content, "Generated-Uts")
+      this.downloadFile(data.choices[0].message.content, `Generated-UTs-${environment.model}-${timeValue}${timeUnit}`)
     })
   }
 
@@ -96,11 +113,11 @@ export class AppComponent {
 
   downloadFile = (content: string, filename: string): void => {
     const blob = new Blob([content], { type: 'text/plain' });
-    const anchor = document.createElement('a');
-    anchor.download = filename;
-    anchor.href = window.URL.createObjectURL(blob);
-    anchor.target = '_blank';
-    anchor.click();
+    this.anchor = document.createElement('a');
+    this.anchor.download = filename;
+    this.anchor.href = window.URL.createObjectURL(blob);
+    this.anchor.target = '_blank';
+    this.anchor.click();
   }
 
   submitForm = (): void => {
@@ -110,6 +127,22 @@ export class AppComponent {
 
   switchPages = (): void => {
     this.showFooter = !this.showFooter
+  }
+
+  onFileSelected = (event: any): void => {
+    const file: File = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+      this.showUploadedFile = true
+      this.showTheUt = 'Provide me Unit test for all the methods for the below file \n' + (e.target.result)
+      setTimeout(() =>{
+        this.showUploadedFile = false
+      }, 3000)
+      console.log(e.target.result); // This will log the file content to the console
+    };
+
+    reader.readAsText(file);
   }
 }
 

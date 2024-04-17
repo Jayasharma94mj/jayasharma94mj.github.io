@@ -79,7 +79,7 @@ function checkTestMethods(testFilePath, methods, testedMethods) {
             //console.log(`Missing unit test for method '${method.name}' in: ${testFilePath}`);
             //console.log(`Provide me unit test for below content: ${method.content}`);
             missingUnitTestCount++;
-            missingUnitTests.push("Provide me unit test for below content: ".concat(method.content));
+            missingUnitTests.push("Provide me Angular unit test for below content: ".concat(method.content));
         }
     });
 }

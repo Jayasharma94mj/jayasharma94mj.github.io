@@ -13,6 +13,7 @@ import { environment } from '../environments/environment.prod';
     //private baseUrl = 'http://localhost:3000';
     private client: any;
     private apiKey = environment.apiKey;
+    private model = environment.model
     constructor(private http: HttpClient) {
       const endpoint = "https://factexpdaiopi02.openai.azure.com/";
       const credential = new AzureKeyCredential(this.apiKey);
@@ -42,8 +43,8 @@ import { environment } from '../environments/environment.prod';
             "Content-Type": 'application/json',
           })
         };
-      return this.http.post('https://factexpdaiopi02.openai.azure.com/openai/deployments/gpt-35-UT/chat/completions?api-version=2023-05-15', {
-          "model": "gpt-35-UT",
+      return this.http.post('https://factexpdaiopi02.openai.azure.com/openai/deployments/' + this.model + '/chat/completions?api-version=2023-05-15', {
+          "model": this.model,
           "messages": [
             {
               "role": "system",

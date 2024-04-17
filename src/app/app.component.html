@@ -20,11 +20,17 @@
       <button (click)="generateUts()" class="btn btn-primary  button-class">Generate UTs</button>
       <!-- <button (click)="clickWithoutPackage()" class="btn btn-primary button-class">Direct Generate UTs</button> -->
     </div>
+    <div>
+      <input class="title" type="file" (change)="onFileSelected($event)">
+    </div>
 
     <div class="d-flex justify-content-center" *ngIf="isLoading">
       <div class="spinner-grow spiner" style="width: 5rem; height: 5rem; color: white;" role="status">
         <span class="sr-only">Loading...</span>
       </div>
+    </div>
+    <div *ngIf="showUploadedFile" class="snackbar">
+          File Uploaded Successfully !!!
     </div>
     <div *ngIf="showutdata">
       <h5 class="title">Total Number of Methods: {{totalUnittest}}</h5>

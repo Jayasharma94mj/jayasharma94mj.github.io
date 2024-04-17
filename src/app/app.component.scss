@@ -23,7 +23,7 @@ margin: 0 10px;
         }
       
     }
-    .title{
+        .title{
         color: white;
     }
     .button-class{
@@ -69,3 +69,43 @@ margin: 0 10px;
         padding: 3%;
     }
 }
+@keyframes showSnackbar {
+    from {
+      transform: translate(-50%, 100%);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes hideSnackbar {
+    from {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+    to {
+      transform: translate(-50%, 100%);
+      opacity: 0;
+    }
+  }
+  
+  .snackbar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    animation: showSnackbar 0.3s forwards;
+  }
+  
+  .snackbar.hide {
+    animation: hideSnackbar 0.3s forwards;
+  }
+  
