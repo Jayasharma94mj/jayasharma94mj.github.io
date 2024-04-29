@@ -20,8 +20,14 @@
       <button (click)="generateUts()" class="btn btn-primary  button-class">Generate UTs</button>
       <!-- <button (click)="clickWithoutPackage()" class="btn btn-primary button-class">Direct Generate UTs</button> -->
     </div>
-    <div>
+    <div class="upload-ts">
+      Upload .ts file
       <input class="title" type="file" (change)="onFileSelected($event)">
+    </div>
+
+    <div class="upload-ts">
+      Upload .spec file
+      <input class="title" type="file" (change)="onSpecSelected($event)">
     </div>
 
     <div class="d-flex justify-content-center" *ngIf="isLoading">
@@ -32,7 +38,7 @@
     <div *ngIf="showUploadedFile" class="snackbar">
           File Uploaded Successfully !!!
     </div>
-    <div *ngIf="showutdata">
+    <div *ngIf="showutdata" class="bottom-row">
       <h5 class="title">Total Number of Methods: {{totalUnittest}}</h5>
       <h5 class="title">Number of Uncovered Methods: <span class="missing-ut">{{missingUnitTest}}</span></h5>
       <div class="pie-chart">

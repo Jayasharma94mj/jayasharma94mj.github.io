@@ -23,6 +23,9 @@ margin: 0 10px;
         }
       
     }
+    .bottom-row{
+      margin-top: 1rem;
+    }
         .title{
         color: white;
     }
@@ -42,7 +45,7 @@ margin: 0 10px;
             .pie-chart{
                 position: absolute;
                 right: 10%;
-                top: 43%;
+                top: 61%;
             }
        
         .title-data{
@@ -55,6 +58,10 @@ margin: 0 10px;
             display: flex;
             justify-content: space-evenly;
             margin: 3rem 0rem;
+        }
+        .upload-ts{
+          display: inline-grid;
+          color: white;
         }
         .missing-ut{
             color:red

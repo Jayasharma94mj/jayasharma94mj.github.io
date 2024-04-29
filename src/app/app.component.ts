@@ -18,7 +18,6 @@ import { environment } from '../environments/environment.prod';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Lets Help you to Find out missing uts';
   showTheUt = ''
   initialValue: boolean = false;
   userForm: FormGroup;
@@ -31,6 +30,8 @@ export class AppComponent {
   totalUnittest = 0
   anchor: any
   showFooter: boolean = false
+  specFile: string = ''
+  tsFile: string = ''
   public pieChartOptions = {
     responsive: false,
   };
@@ -125,20 +126,34 @@ export class AppComponent {
     this.generateUts()
   }
 
-  switchPages = (): void => {
-    this.showFooter = !this.showFooter
-  }
-
   onFileSelected = (event: any): void => {
     const file: File = event.target.files[0];
     const reader = new FileReader();
 
     reader.onload = (e: any) => {
       this.showUploadedFile = true
-      this.showTheUt = 'Provide me Unit test for all the methods for the below file \n' + (e.target.result)
+      this.tsFile = '\n .ts file \n' + (e.target.result)
       setTimeout(() =>{
         this.showUploadedFile = false
-      }, 3000)
+      }, 2000)
+      console.log(e.target.result); // This will log the file content to the console
+    };
+
+    reader.readAsText(file);
+  }
+
+  onSpecSelected = (event: any): void => {
+    const file: File = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+      this.showUploadedFile = true
+      this.specFile = '.spec file \n' + (e.target.result)
+      this.showTheUt = 'Compare Both .ts and .spec file mentioned below Properly and Please Provide me Angular Unit test cases for all the methods that are not missing and not covered in the .spec file. Dn"t skip any \n\n' + this.tsFile  + this.specFile  
+      //this.showTheUt = 'No you are not giving me the proper result please compare both the files and provdie the missing method only. you are providing me the ut for complete spec file'
+      setTimeout(() =>{
+        this.showUploadedFile = false
+      }, 2000)
       console.log(e.target.result); // This will log the file content to the console
     };
 
